@@ -9,14 +9,10 @@ services:
       - .:/var/www
     ports:
       - "9000:9000"  # Порт PHP-FPM
-      - "8000:8000"  # Порт laravel dev сервера
-      - "3000:3000"  # Порт Vite
-      - "4173:4173"  # Порт Vite
+      - "3000:3000"  # Порт Vite (дев)
     expose:
       - "9000"
-      - "8000"
       - "3000"
-      - "4173"
     environment:
       DB_CONNECTION: mysql
       DB_DATABASE: blog

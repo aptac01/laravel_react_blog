@@ -29,22 +29,15 @@ WORKDIR /var/www
 # копируем исходники
 COPY . /var/www/
 
-# Копируем конфигурационные файлы
-COPY .env.example .env
-COPY docker-compose.yaml .
-
 WORKDIR /var/www
 
-# Установка зависимостей
+# Устанавливаем PHP расширения
 USER root
-RUN docker-php-ext-install pdo pdo_mysql                        # Устанавливаем PHP расширения
-RUN composer install --no-interaction --optimize-autoloader
-RUN npm install --dev
+RUN docker-php-ext-install pdo pdo_mysql
 USER www-data
 
 # открытие портов
 EXPOSE 9000
-EXPOSE 8000
 EXPOSE 3000
 
 ENTRYPOINT [".deploy_scripts/entrypoint.sh"]
