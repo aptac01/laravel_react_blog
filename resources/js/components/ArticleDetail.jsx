@@ -21,7 +21,6 @@ const ArticleDetail = ({}) => {
             <h1>{article.title}</h1>
             <p>{article.content}</p>
             <CommentList articleId={article.id} comments={article.comments} />
-            {/*<CommentForm articleId={article.id} />*/}
             <CommentForm
                 articleId={article.id}
                 onSubmit={(newComment) => {

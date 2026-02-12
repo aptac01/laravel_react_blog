@@ -1,5 +1,5 @@
-# laravel_test_polis.online 
-Блог с комментариями на Laravel, WIP
+# laravel_react_blog
+Блог с комментариями к статьям, на Laravel, vite, react, в докере.
 
 ## Установка
 
@@ -7,11 +7,7 @@
 * Docker
 * Docker Compose
 
-## todo
-
- - вписать сюда актуальные инструкции по деплою
- - permissions.sh
- - only_first_time.sh
+Я использовал версию докера с их сайта https://docs.docker.com/engine/
 
 ### Запуск
 
@@ -21,38 +17,41 @@ git clone <ссылка на репозиторий>
 cd проект
 ```
 
-2. Установить зависимости
+2. Настроить параметры в файлах .env.example и docker-compose.yaml (коннект к БД, APP_URL, VITE_HMR_HOST)
+
+3. Настроить права на папку с проектом, для этого из папки проекта выполнить команду:
 ```bash
-docker compose up -d --build
-docker compose exec app composer install
-docker compose exec app npm install
+sudo ./.deploy_scripts/permissions.sh
 ```
 
-3. Настроить окружение
+3. Перед первым запуском докер образа - раскомментировать 4-ю строку в файле ./.deploy_scripts/entrypoint.sh, чтобы было так:
 ```bash
-cp .env.example .env
+source .deploy_scripts/only_first_time.sh
+```
+После установки зависимостей и миграций - можно закомментировать обратно.
+
+4. Запустить докер образ
+```bash
+docker compose up
 ```
 
-4. Выполнить миграции и сидеры
-```bash
-docker-compose exec app php artisan migrate
-docker-compose exec app php artisan db:seed
-```
+Приложение будет доступно по адресу http://localhost:8088.
+По умолчанию - запускается dev конфигурация, с hot module replacement и без сборки ресурсов. 
+Чтобы запустить prod конфигурацию, нужно в ``.deploy_scripts/entrypoint.sh`` закомментировать ``запуск для дева`` и раскомментировать ``запуск на прод``.
+Запуск на прод - на том же порту, 8088.
 
-5. Запустить приложение
-```bash
-docker-compose up -d
-```
-
-Приложение будет доступно по адресу http://localhost
-
-## API документация
+## Документация
 
 ### Статьи
 * **GET /api/articles** - получить список статей
 * **GET /api/articles/{id}** - получить статью по ID
 * **POST /api/articles** - создать новую статью
 * **POST /api/articles/{id}/comments** - добавить комментарий к статье
+
+### Фронт
+ * **GET /** - открыть список статей
+ * **GET /articles/:id** - открыть выбранную статью, комментарии к ней и форму нового комментария
+ * **GET /add** - открыть форму добавления статьи, ссылка на это есть в списке статьей
 
 ### Модель Article
 * id
@@ -72,12 +71,13 @@ docker-compose up -d
 
 Для запуска тестов:
 ```bash
-docker-compose exec app php artisan test
+docker compose exec app php artisan test
 ```
+Отдельная БД для тестов не настроена, так что после запуска тестов - БД очищается, это поведение laravel по умолчанию.
 
 Для очистки кеша:
 ```bash
-docker-compose exec app php artisan config:clear
-docker-compose exec app php artisan route:clear
-docker-compose exec app php artisan cache:clear
+docker compose exec app php artisan config:clear
+docker compose exec app php artisan route:clear
+docker compose exec app php artisan cache:clear
 ```

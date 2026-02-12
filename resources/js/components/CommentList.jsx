@@ -1,4 +1,3 @@
-// components/CommentList.jsx
 import React from 'react';
 
 const CommentList = ({ articleId, comments }) => {

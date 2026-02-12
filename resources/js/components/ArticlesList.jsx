@@ -12,6 +12,8 @@ const ArticlesList = () => {
 
     return (
         <div>
+            <h1>Добавление статьи</h1>
+            <div><a href={'/add'}>добавить</a> </div>
             <h1>Статьи</h1>
             <ul>
                 {articles.map(article => (
