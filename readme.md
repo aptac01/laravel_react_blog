@@ -65,7 +65,7 @@ docker compose up
 * author_name
 * content
 * created_at
-```
+
 
 ### Завершающие команды
 
