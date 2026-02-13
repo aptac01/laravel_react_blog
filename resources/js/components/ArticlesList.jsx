@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 
 const ArticlesList = () => {
     const [articles, setArticles] = useState([]);
@@ -11,21 +12,27 @@ const ArticlesList = () => {
     }, []);
 
     return (
-        <div>
-            <h1>Добавление статьи</h1>
-            <div><a href={'/add'}>добавить</a> </div>
-            <h1>Статьи</h1>
-            <ul>
+        <Container>
+            <h1 className="mb-4">Статьи</h1>
+            <Row xs={1} md={2} className="g-4">
                 {articles.map(article => (
-                    <li key={article.id}>
-                        <a href={`/articles/${article.id}`}>
-                            {article.title}
-                        </a>
-                        <p>{article.content.substring(0, 100)}...</p>
-                    </li>
+                    <Col key={article.id}>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title>
+                                    <a href={`/articles/${article.id}`} className="text-dark">
+                                        {article.title}
+                                    </a>
+                                </Card.Title>
+                                <Card.Text>
+                                    {article.content.substring(0, 100)}...
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
                 ))}
-            </ul>
-        </div>
+            </Row>
+        </Container>
     );
 };
 

@@ -75,6 +75,11 @@ docker compose exec app php artisan test
 ```
 Отдельная БД для тестов не настроена, так что после запуска тестов - БД очищается, это поведение laravel по умолчанию.
 
+Для заполнения базы тестовыми данными:
+```bash
+docker compose exec app php artisan db:seed
+```
+
 Для очистки кеша:
 ```bash
 docker compose exec app php artisan config:clear

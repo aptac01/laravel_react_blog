@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Form, Button, Alert } from 'react-bootstrap';
 
 function CommentForm({ articleId, onSubmit }) {
     const [formData, setFormData] = useState({
@@ -59,37 +60,56 @@ function CommentForm({ articleId, onSubmit }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} noValidate>
-            <div>
-                <label>Ваше имя *</label>
-                <input
+        <Form onSubmit={handleSubmit} noValidate>
+            <Form.Group className="mb-3">
+                <Form.Label>Ваше имя <span className="text-danger">*</span></Form.Label>
+                <Form.Control
                     type="text"
                     name="author_name"
                     value={formData.author_name}
                     onChange={handleChange}
                     disabled={isLoading}
+                    isInvalid={!!errors.author_name}
                 />
-                {errors.author_name && <div>{errors.author_name.join(', ')}</div>}
-            </div>
+                {errors.author_name && (
+                    <Form.Text className="text-danger">
+                        {errors.author_name.join(', ')}
+                    </Form.Text>
+                )}
+            </Form.Group>
 
-            <div>
-                <label>Комментарий *</label>
-                <textarea
+            <Form.Group className="mb-3">
+                <Form.Label>Комментарий <span className="text-danger">*</span></Form.Label>
+                <Form.Control
+                    as="textarea"
                     name="content"
                     value={formData.content}
                     onChange={handleChange}
                     rows={4}
                     disabled={isLoading}
+                    isInvalid={!!errors.content}
                 />
-                {errors.content && <div>{errors.content.join(', ')}</div>}
-            </div>
+                {errors.content && (
+                    <Form.Text className="text-danger">
+                        {errors.content.join(', ')}
+                    </Form.Text>
+                )}
+            </Form.Group>
 
-            {errors.general && <div>{errors.general.join(', ')}</div>}
+            {errors.general && (
+                <Alert variant="danger">
+                    {errors.general.join(', ')}
+                </Alert>
+            )}
 
-            <button type="submit" disabled={isLoading}>
+            <Button
+                variant="primary"
+                type="submit"
+                disabled={isLoading}
+            >
                 {isLoading ? 'Отправляется...' : 'Отправить комментарий'}
-            </button>
-        </form>
+            </Button>
+        </Form>
     );
 }
 

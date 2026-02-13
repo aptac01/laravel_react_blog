@@ -1,12 +1,14 @@
-
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Form, Button, Alert } from 'react-bootstrap';
 
 const AddArticleForm = () => {
     const [formData, setFormData] = useState({
         title: '',
         content: '',
     });
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,56 +20,50 @@ const AddArticleForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.post('/api/articles', formData);
             if (response.status === 201) {
-                alert('Статья успешно добавлена!');
-                setFormData({
-                    title: '',
-                    content: '',
-                });
+                setFormData({ title: '', content: '' });
+                setError(null);
+                setSuccess('Статья успешно добавлена!');
+                setTimeout(() => setSuccess(null), 3000); // Автоматическое скрытие через 3 секунды
             }
         } catch (error) {
-            console.error('Ошибка при добавлении статьи:', error);
-            alert('Произошла ошибка при добавлении статьи');
+            setError('Произошла ошибка при добавлении статьи');
         }
     };
 
     return (
-        <div className="add-article-form">
-            <h2>Добавить новую статью</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="title">Заголовок</label>
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                    />
-                </div>
+        <div className="mt-5">
+            <h2 className="mb-4">Добавить новую статью</h2>
 
-                <div className="form-group">
-                    <label htmlFor="content">Содержание</label>
-                    <textarea
-                        id="content"
-                        name="content"
-                        value={formData.content}
-                        onChange={handleChange}
-                        required
-                        rows="10"
-                        className="form-control"
-                    />
-                </div>
+            {success && (
+                <Alert variant="success" className="mb-3">
+                    {success}
+                    <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </Alert>
+            )}
 
-                <button type="submit" className="btn btn-primary">
+            {error && (
+                <Alert variant="danger" className="mb-3">
+                    {error}
+                    <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </Alert>
+            )}
+
+            <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3">
+                    <Form.Label>Заголовок</Form.Label>
+                    <Form.Control type="text" name="title" value={formData.title} onChange={handleChange} required />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label>Содержание</Form.Label>
+                    <Form.Control as="textarea" rows={10} name="content" value={formData.content} onChange={handleChange} required />
+                </Form.Group>
+                <Button variant="primary" type="submit">
                     Добавить статью
-                </button>
-            </form>
+                </Button>
+            </Form>
         </div>
     );
 };

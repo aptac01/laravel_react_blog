@@ -1,0 +1,19 @@
+/* Стили для комментариев */
+.comment-list {
+    margin-top: 2rem;
+}
+
+.comment {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.comment h4 {
+    margin-bottom: 0.5rem;
+}
+
+.comment small {
+    display: block;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
