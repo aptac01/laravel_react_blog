@@ -17,3 +17,48 @@
     color: #6c757d;
     font-size: 0.9rem;
 }
+
+.comment-form {
+    margin-top: 35px;
+}
+
+.article-comment-btn-close {
+    margin-top: 20px;
+}
+
+.list-group-item {
+    border: none !important;
+    padding: 0 !important;
+}
+
+/* PopupManager*/
+.popup-manager {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.notification-popup {
+    animation: slideUp 0.3s ease-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    margin: 5px 0;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

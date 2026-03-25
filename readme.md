@@ -1,5 +1,5 @@
 # laravel_react_blog
-Блог с комментариями к статьям, на Laravel, vite, react, в докере.
+Блог с комментариями к статьям, на Laravel, vite, react, в докере, с использованием websocket'ов.
 
 ## Установка
 
@@ -17,7 +17,7 @@ git clone <ссылка на репозиторий>
 cd проект
 ```
 
-2. Настроить параметры в файлах .env.example и docker-compose.yaml (коннект к БД, APP_URL, VITE_HMR_HOST)
+2. (при необходимости) Настроить параметры в файлах .env.example и docker-compose.yaml (коннект к БД, APP_URL, VITE_HMR_HOST)
 
 3. Настроить права на папку с проектом, для этого из папки проекта выполнить команду:
 ```bash
@@ -28,7 +28,7 @@ sudo ./.deploy_scripts/permissions.sh
 ```bash
 source .deploy_scripts/only_first_time.sh
 ```
-После установки зависимостей и миграций - можно закомментировать обратно.
+После установки зависимостей и миграций - лучше закомментировать обратно.
 
 4. Запустить докер образ
 ```bash
@@ -47,6 +47,7 @@ docker compose up
 * **GET /api/articles/{id}** - получить статью по ID
 * **POST /api/articles** - создать новую статью
 * **POST /api/articles/{id}/comments** - добавить комментарий к статье
+* **DELETE /api/articles/{id}/comment/{commId}** - удалить комментарий
 
 ### Фронт
  * **GET /** - открыть список статей

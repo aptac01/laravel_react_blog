@@ -5,6 +5,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import ArticlesList from './components/ArticlesList';
 import ArticleDetail from './components/ArticleDetail';
 import AddArticleForm from './components/AddArticleForm';
+import PopupManager from './components/PopupManager';
 import Navbar from './components/Navbar';
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
                         <Route path="/add" element={<AddArticleForm />} />
                     </Routes>
                 </div>
+                <PopupManager />
             </div>
         </BrowserRouter>
     );

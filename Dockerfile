@@ -1,5 +1,5 @@
 # Базовый образ с PHP и необходимыми компонентами
-FROM php:8.1-fpm
+FROM php:8.3-fpm
 
 # Установка системных зависимостей
 RUN apt-get update && \
@@ -33,7 +33,7 @@ WORKDIR /var/www
 
 # Устанавливаем PHP расширения
 USER root
-RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-install pdo pdo_mysql pcntl
 USER www-data
 
 # открытие портов

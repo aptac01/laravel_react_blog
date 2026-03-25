@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import React, {useState} from 'react';
+import { Form, Button} from 'react-bootstrap';
+import ClosableAlert from './ClosableAlert';
+import axios from 'axios';
 
 function CommentForm({ articleId, onSubmit }) {
     const [formData, setFormData] = useState({
@@ -24,7 +26,7 @@ function CommentForm({ articleId, onSubmit }) {
         return newErrors;
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setIsLoading(true);
         setErrors({});
@@ -36,31 +38,61 @@ function CommentForm({ articleId, onSubmit }) {
             return;
         }
 
-        try {
-            const response = await fetch('/api/articles/' + articleId + '/comments', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...formData,
-                }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                setFormData({ author_name: '', content: '' });
-                onSubmit?.(data);
-            } else {
-                setErrors(data.errors || { general: ['Ошибка при отправке'] });
+        axios.post(
+            `/api/articles/${articleId}/comments`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             }
-        } catch (err) {
-            setErrors({ general: ['Не удалось подключиться к серверу'] });
-        }
-        setIsLoading(false);
+        )
+            .then((response) => {
+                const data = response.data;
+
+                if (response.status >= 200 && response.status < 300) {
+                    setFormData({ author_name: '', content: '' });
+
+                    // Вызываем onSubmit, если она есть
+                    if (onSubmit) {
+                        onSubmit(data);
+                    }
+
+                    window.showNotification(
+                        'Комментарий успешно отправлен',
+                        'success',
+                        true,
+                        5000
+                    );
+                } else {
+                    // Сервер вернул ошибку (но HTTP-статус не 2xx)
+                    setErrors(data.errors || { general: ['Ошибка при отправке'] });
+
+                }
+            })
+            .catch((err) => {
+                // Сетевая ошибка или другие проблемы
+                if (err.response && err.response.data && err.response.data.errors) {
+                    setErrors(err.response.data.errors);
+                } else {
+                    setErrors({ general: ['Не удалось подключиться к серверу'] });
+                }
+            })
+            .finally(() => {
+                // Завершаем состояние загрузки вне зависимости от результата
+                setIsLoading(false);
+            });
     };
 
     return (
-        <Form onSubmit={handleSubmit} noValidate>
+        <Form className='comment-form' onSubmit={handleSubmit} noValidate>
+            {errors.general && (
+                <ClosableAlert
+                    message={errors.general.join(', ')}
+                    type="danger"
+                />
+            )}
+
             <Form.Group className="mb-3">
                 <Form.Label>Ваше имя <span className="text-danger">*</span></Form.Label>
                 <Form.Control
@@ -95,12 +127,6 @@ function CommentForm({ articleId, onSubmit }) {
                     </Form.Text>
                 )}
             </Form.Group>
-
-            {errors.general && (
-                <Alert variant="danger">
-                    {errors.general.join(', ')}
-                </Alert>
-            )}
 
             <Button
                 variant="primary"
